@@ -11,6 +11,14 @@ namespace MyWebApplication.Controllers
             return View();
         }
 
+        public ActionResult Users()
+        {
+            UserManager um = new UserManager();
+            UsersModel user = um.GetAllUsers();
+
+            return View(user);
+        }
+
         [HttpPost]
         public ActionResult SignUp(UserModel user)
         {
@@ -21,7 +29,7 @@ namespace MyWebApplication.Controllers
                 {
                     um.AddUserAccount(user);
                     // FormsAuthentication.SetAuthCookie(user.FirstName, false);
-                    return RedirectToAction("","Home");
+                    return RedirectToAction("", "Home");
                 }
                 else
                     ModelState.AddModelError("", "Login Name already taken.");
@@ -29,12 +37,18 @@ namespace MyWebApplication.Controllers
             return View();
         }
 
-        [HttpGet]
-        public ActionResult GetUsers()
+        [HttpPut]
+        public async Task<ActionResult> Update([FromBody] UserModel userData)
         {
-            var users = new UserManager().GetAllUsers();
-
-            return View();
+            UserManager um = new UserManager();
+            if (um.IsLoginNameExist(userData.LoginName))
+            {
+                um.UpdateUserAccount(userData);
+                return RedirectToAction("Index"); // Redirect to a relevant action after successful update.
+            }
+            // Handle the case when the login name doesn't exist, e.g., return a relevant error view.
+            return RedirectToAction("LoginNameNotFound");
         }
+
     }
 }

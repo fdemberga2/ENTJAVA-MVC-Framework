@@ -2892,11 +2892,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\Infinix\\Documents\\Programming files\\ENJAV\\MyWebApplication\\MyWebApplication\\MyWebApplication.csproj",
+      "projectUniqueName": "c:\\Users\\Infinix\\Documents\\Programming files\\ENJAV\\ENTJAVA-MVC-Framework\\MyWebApplication\\MyWebApplication.csproj",
       "projectName": "MyWebApplication",
-      "projectPath": "c:\\Users\\Infinix\\Documents\\Programming files\\ENJAV\\MyWebApplication\\MyWebApplication\\MyWebApplication.csproj",
+      "projectPath": "c:\\Users\\Infinix\\Documents\\Programming files\\ENJAV\\ENTJAVA-MVC-Framework\\MyWebApplication\\MyWebApplication.csproj",
       "packagesPath": "C:\\Users\\Infinix\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\Infinix\\Documents\\Programming files\\ENJAV\\MyWebApplication\\MyWebApplication\\obj\\",
+      "outputPath": "c:\\Users\\Infinix\\Documents\\Programming files\\ENJAV\\ENTJAVA-MVC-Framework\\MyWebApplication\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Infinix\\AppData\\Roaming\\NuGet\\NuGet.Config"

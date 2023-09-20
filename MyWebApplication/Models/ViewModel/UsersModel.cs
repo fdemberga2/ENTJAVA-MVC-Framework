@@ -23,4 +23,9 @@ namespace MyWebApplication.Models.ViewModel
         [Display(Name = "Created By")]
         public int CreatedBy { get; set; }
     }
+
+    public class UsersModel
+    {
+        public List<UserModel> Users { get; set; }
+    }
 }
