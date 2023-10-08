@@ -19,7 +19,8 @@ namespace MyWebApplication.Models.ViewModel
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
         public string Gender { get; set; }
-        [Required(ErrorMessage = "*")]
+        [Required(AllowEmptyStrings = true)]
+        public string AccountImage { get; set; }
         [Display(Name = "Created By")]
         public int CreatedBy { get; set; }
     }

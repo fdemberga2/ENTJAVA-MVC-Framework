@@ -14,5 +14,6 @@ namespace MyWebApplication.Models.DB
         public DateTime CreatedDateTime { get; set; }
         public int ModifiedBy { get; set; }
         public DateTime ModifiedDateTime { get; set; }
+        public string AccountImage { get; set; }
     }
 }
