@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\Infinix\\Documents\\Programming files\\ENJAV\\ENTJAVA-MVC-Framework\\MyWebApplication\\MyWebApplication.csproj": {}
+    "c:\\Users\\Infinix\\Documents\\Programming files\\ENJAV\\ENTJAVA-MVC-Framework\\MyWebApplication.csproj": {}
   },
   "projects": {
-    "c:\\Users\\Infinix\\Documents\\Programming files\\ENJAV\\ENTJAVA-MVC-Framework\\MyWebApplication\\MyWebApplication.csproj": {
+    "c:\\Users\\Infinix\\Documents\\Programming files\\ENJAV\\ENTJAVA-MVC-Framework\\MyWebApplication.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\Infinix\\Documents\\Programming files\\ENJAV\\ENTJAVA-MVC-Framework\\MyWebApplication\\MyWebApplication.csproj",
+        "projectUniqueName": "c:\\Users\\Infinix\\Documents\\Programming files\\ENJAV\\ENTJAVA-MVC-Framework\\MyWebApplication.csproj",
         "projectName": "MyWebApplication",
-        "projectPath": "c:\\Users\\Infinix\\Documents\\Programming files\\ENJAV\\ENTJAVA-MVC-Framework\\MyWebApplication\\MyWebApplication.csproj",
+        "projectPath": "c:\\Users\\Infinix\\Documents\\Programming files\\ENJAV\\ENTJAVA-MVC-Framework\\MyWebApplication.csproj",
         "packagesPath": "C:\\Users\\Infinix\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\Infinix\\Documents\\Programming files\\ENJAV\\ENTJAVA-MVC-Framework\\MyWebApplication\\obj\\",
+        "outputPath": "c:\\Users\\Infinix\\Documents\\Programming files\\ENJAV\\ENTJAVA-MVC-Framework\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Infinix\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -44,19 +44,23 @@
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[7.0.11, )"
+              "version": "[7.0.12, )"
             },
             "Microsoft.EntityFrameworkCore.Abstractions": {
               "target": "Package",
-              "version": "[7.0.11, )"
+              "version": "[7.0.12, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[7.0.11, )"
+              "version": "[7.0.12, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "target": "Package",
-              "version": "[7.0.11, )"
+              "version": "[7.0.12, )"
+            },
+            "Microsoft.Owin.Security.Cookies": {
+              "target": "Package",
+              "version": "[4.2.2, )"
             }
           },
           "imports": [
