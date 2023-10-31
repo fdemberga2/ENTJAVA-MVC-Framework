@@ -1,0 +1,14 @@
+@{
+    ViewData["Title"] = "UnAuthorized";
+}
+
+<div class="text-center">
+    <h1 class="display-4">You are not Authorized to view this page</h1>
+    <p>Redirecting to the <a href="~/Home">Home</a> page in 3 seconds...</p>
+</div>
+
+<script>
+    setTimeout(function () {
+        window.location.href = "@Url.Action("Index", "Home")";
+    }, 3000); // 3000 milliseconds (3 seconds)
+</script>

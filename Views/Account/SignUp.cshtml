@@ -6,13 +6,39 @@
     ViewBag.Title = "SignUp";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h2>SignUp</h2>
+<h2>Sign Up</h2>
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
     <div class="form-horizontal">
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="row">
+            <div class="col">
+                <h6>Profile Picture:</h6>
+                <div style="margin: 16px; padding: 16px">
+                    <input class="form-control form-control-lg"
+                        id="selectAvatar"
+                        type="file" />
+                </div>
+            </div>
+            <div class="col">
+                <h6>Image Preview:</h6>
+                <img class="img" id="avatar" />
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col" hidden>
+                        <textarea id="textArea" name="ImageBase64" rows="30" cols="50"> </textarea> 
+                        <input type="hidden" id="hiddenImageBase64" name="AccountImage" value="" />
+                    </div>
+                    <div class="col" hidden>
+                        @Html.TextBoxFor(model => model.AccountImage, new { type = "file", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.AccountImage, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="form-group">
             @Html.LabelFor(model => model.LoginName, htmlAttributes: new { @class =
         "control-label col-md-2" })
@@ -63,31 +89,7 @@
             }, new { @class = "form-control" })
             </div>
         </div>
-        <div class="row">
-            <div style="margin: 16px; padding: 16px">
-                <input class="form-control form-control-lg"
-                       id="selectAvatar"
-                       type="file" />
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col">
-                        <h6>Image Preview:</h6>
-                        <img class="img" id="avatar" />
-                    </div>
-                    <div class="col">
-                        <h6>Base64 Output</h6>
-    @*                     <textarea id="textArea" name="ImageBase64" rows="30" cols="50"> </textarea> *@
-                        <input type="hidden" id="hiddenImageBase64" name="AccountImage" value="" />
-
-                    </div>
-                    <div class="col" hidden>
-                        @Html.TextBoxFor(model => model.AccountImage, new { type = "file", @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.AccountImage, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-            </div>
-        </div>
+        
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Register" class="btn btn-default" />
@@ -127,6 +129,3 @@
          uploadImage(e);
      });
 </script>
-<div>
-    @Html.ActionLink("Back to Main", "Index","Home")
-</div>

@@ -18,14 +18,26 @@ namespace MyWebApplication.Controllers
         //public SignInManager<string> _signInManager;
         public ActionResult Login()
         {
-
             return View();
         }
+        
+        public ActionResult MyProfile()
+        {
+            UserManager um = new UserManager();
+            string currentLoginName = User.Identity.Name; // Get the username of the logged-in user
 
+            UsersModel user = um.GetUserByUserName(currentLoginName); // Replace with your service method
+
+            if (user == null)
+            {
+                return NotFound(); // Handle the case when the user is not found
+            }
+
+            return View(user);
+        }
         [AuthorizeRoles("Admin")]
         public ActionResult Users()
         {
-
             UserManager um = new UserManager();
             UsersModel user = um.GetAllUsers();
 
@@ -56,36 +68,40 @@ namespace MyWebApplication.Controllers
         [HttpPut]
         public async Task<ActionResult> Update([FromBody] UserModel userData)
         {
+            ModelState.Remove("Password");
+
             UserManager um = new UserManager();
             if (um.IsLoginNameExist(userData.LoginName))
             {
                 um.UpdateUserAccount(userData);
-                return RedirectToAction("Index"); // Redirect to a relevant action after successful update.
+                // Added a return Ok() statement to indicate success
+                return Ok();
             }
-            // Handle the case when the login name doesn't exist, e.g., return a relevant error view.
-            return RedirectToAction("LoginNameNotFound");
+            // Handle the case when the login name doesn't exist, e.g., return a relevant error response
+            return NotFound();
         }
 
         [HttpPost]
         public ActionResult LogIn(UserLoginModel ulm)
         {
-
             if (ModelState.IsValid)
             {
                 UserManager um = new UserManager();
 
-                if (string.IsNullOrEmpty(ulm.Password))
+                if (um.IsLoginNameExist(ulm.LoginName)) // Check if the email exists in the database
                 {
-                    ModelState.AddModelError("", "The user login or password provided is incorrect.");
-                }
-                else
-                {
-                    if (ulm.Password.Equals(ulm.Password))
+                    var storedPassword = um.GetUserPassword(ulm.LoginName); // Retrieve the stored password from the database
+
+                    if (string.IsNullOrEmpty(ulm.Password))
+                    {
+                        ModelState.AddModelError("", "Please enter your password.");
+                    }
+                    else if (ulm.Password == storedPassword) // Compare the provided password with the stored password
                     {
                         var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Name, ulm.LoginName)
-                    };
+                        {
+                            new Claim(ClaimTypes.Name, ulm.LoginName)
+                        };
 
                         var userIdentity = new ClaimsIdentity(claims, "login");
 
@@ -95,12 +111,16 @@ namespace MyWebApplication.Controllers
                         HttpContext.SignInAsync(principal);
 
                         // Redirect to the desired action (e.g., "Users")
-                        return RedirectToAction("Users");
+                        return RedirectToAction("Index", "Home");
                     }
                     else
                     {
                         ModelState.AddModelError("", "The password provided is incorrect.");
                     }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "The provided email address does not exist.");
                 }
             }
 

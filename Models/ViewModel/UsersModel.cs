@@ -10,11 +10,11 @@ namespace MyWebApplication.Models.ViewModel
         public int UserID { get; set; }
         [RegularExpression(@"^[\w\.-]+@[\w\.-]+\.\w+$", ErrorMessage = "Login ID should be a valid email address.")]
         [Required(ErrorMessage = "*")]
-        [Display(Name = "Login ID")]
+        [Display(Name = "Email Address")]
         public string LoginName { get; set; }
         
         [Required(ErrorMessage = "*")]
-        //[RegularExpression(@"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$", ErrorMessage = "Password must be at least 8 characters long and contain at least one letter, one digit, and one special character.")]
+        [RegularExpression(@"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$", ErrorMessage = "Password must be at least 8 characters long and contain at least one letter, one digit, and one special character.")]
         [Display(Name = "Password")]
         public string Password { get; set; }
 
@@ -48,8 +48,8 @@ namespace MyWebApplication.Models.ViewModel
     {
         [Key]
         public int SYSUserID { get; set; }
-        [Required(ErrorMessage = "*")]
-        [Display(Name = "Login ID")]
+        [Required(ErrorMessage = "* This Section is Required")]
+        [Display(Name = "Email Address")]
         public string LoginName { get; set; }
         [Required(ErrorMessage = "*")]
         [DataType(DataType.Password)]

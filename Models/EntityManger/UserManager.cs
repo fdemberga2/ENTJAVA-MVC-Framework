@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using MyWebApplication.Models.DB;
 using MyWebApplication.Models.ViewModel;
  
@@ -61,72 +62,100 @@ namespace MyWebApplication.Models.EntityManager
         }
  
         public void UpdateUserAccount(UserModel user)
-        {
-            using (MyDBContext db = new MyDBContext())
-            {
-                // Check if a user with the given login name already exists
-                SystemUsers existingSysUser = db.SystemUsers.FirstOrDefault(u => u.LoginName == user.LoginName);
-                Users existingUser = db.Users.FirstOrDefault(u => u.UserID == existingSysUser.UserID);
- 
-                if (existingSysUser != null && existingUser != null)
-                {
-                    // Update the existing user
-                    existingSysUser.ModifiedBy = 1; // This has to be updated
-                    existingSysUser.ModifiedDateTime = DateTime.Now;
- 
- 
-                    // You can also update other properties of the user as needed
-                    existingUser.FirstName = user.FirstName;
-                    existingUser.LastName = user.LastName;
-                    existingUser.Gender = user.Gender;
- 
-                    UserRole userRole = db.UserRole.FirstOrDefault(ur => ur.UserID == existingUser.UserID);
- 
-                    if (userRole != null)
-                    {
-                        userRole.LookUpRoleID = user.RoleID;
-                        db.UserRole.Update(userRole);
-                    }
-                   
-                    db.SaveChanges();
-                }
-                else
-                {
-                    // Add a new user since the user doesn't exist
-                    SystemUsers newSysUser = new SystemUsers
-                    {
-                        LoginName = user.LoginName,
-                        CreatedBy = 1,
-                        PasswordEncryptedText = user.Password, // Update this to handle encryption
-                        CreatedDateTime = DateTime.Now,
-                        ModifiedBy = 1,
-                        ModifiedDateTime = DateTime.Now
-                    };
- 
-                    db.SystemUsers.Add(newSysUser);
-                    db.SaveChanges();
- 
-                    int newUserId = newSysUser.UserID;
- 
-                    Users newUser = new Users
-                    {
-                        UserID = newUserId,
-                        FirstName = user.FirstName,
-                        LastName = user.LastName,
-                        Gender = "1",
-                        CreatedBy = 1,
-                        CreatedDateTime = DateTime.Now,
-                        ModifiedBy = 1,
-                        ModifiedDateTime = DateTime.Now
-                    };
- 
-                    db.Users.Add(newUser);
-                    db.SaveChanges();
-                }
-            }
- 
-        }
- 
+        {
+            using (MyDBContext db = new MyDBContext())
+            {
+                // Check if a user with the given login name already exists
+                SystemUsers existingSysUser = db.SystemUsers.FirstOrDefault(u => u.LoginName == user.LoginName);
+                Users existingUser = db.Users.FirstOrDefault(u => u.UserID == existingSysUser.UserID);
+
+                if (existingSysUser != null && existingUser != null)
+                {
+                    // Update the existing user
+                    existingSysUser.ModifiedBy = 1; // This has to be updated
+                    existingSysUser.ModifiedDateTime = DateTime.Now;
+
+                    // You can also update other properties of the user as needed
+                    existingUser.FirstName = user.FirstName;
+                    existingUser.LastName = user.LastName;
+                    existingUser.Gender = user.Gender;
+
+                    UserRole userRole = db.UserRole.FirstOrDefault(ur => ur.UserID == existingUser.UserID);
+
+                    if (userRole != null)
+                    {
+                        userRole.LookUpRoleID = user.RoleID;
+                        db.UserRole.Update(userRole);
+                    }
+
+                    db.SaveChanges();
+                }
+                else
+                {
+                    // Add a new user since the user doesn't exist
+                    SystemUsers newSysUser = new SystemUsers
+                    {
+                        LoginName = user.LoginName,
+                        CreatedBy = 1,
+                        PasswordEncryptedText = user.Password, // Update this to handle encryption
+                        CreatedDateTime = DateTime.Now,
+                        ModifiedBy = 1,
+                        ModifiedDateTime = DateTime.Now
+                    };
+
+                    db.SystemUsers.Add(newSysUser);
+                    db.SaveChanges();
+
+                    int newUserId = newSysUser.UserID;
+
+                    Users newUser = new Users
+                    {
+                        UserID = newUserId,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        Gender = "1",
+                        CreatedBy = 1,
+                        CreatedDateTime = DateTime.Now,
+                        ModifiedBy = 1,
+                        ModifiedDateTime = DateTime.Now
+                    };
+
+                    db.Users.Add(newUser);
+                    db.SaveChanges();
+                }
+            }
+        }
+        public UsersModel GetUserByUserName(string loginName)
+        {
+            UsersModel list = new UsersModel();
+
+            using (MyDBContext db = new MyDBContext())
+            {
+                var users = from u in db.Users
+                            join us in db.SystemUsers
+                            on u.UserID equals us.UserID
+                            join ur in db.UserRole
+                            on u.UserID equals ur.UserID
+                            join r in db.Role
+                            on ur.LookUpRoleID equals r.RoleID
+                            where us.LoginName == loginName // Filter by the username
+                            select new { u, us, r, ur };
+
+                list.Users = users.Select(records => new UserModel()
+                {
+                    LoginName = records.us.LoginName,
+                    FirstName = records.u.FirstName,
+                    LastName = records.u.LastName,
+                    Gender = records.u.Gender,
+                    CreatedBy = records.u.CreatedBy,
+                    AccountImage = records.u.AccountImage ?? string.Empty,
+                    RoleID = records.ur.LookUpRoleID,
+                    RoleName = records.r.RoleName
+                }).ToList();
+            }
+            return list;
+        }
+
         public UsersModel GetAllUsers()
         {
             UsersModel list = new UsersModel();
