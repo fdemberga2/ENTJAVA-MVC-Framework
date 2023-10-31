@@ -19,13 +19,6 @@ namespace MyWebApplication.Security
         {
             bool authorize = false;
 
-            // Check if the user has the "Member" role
-            if (userAssignedRoles.Contains("Member") && context.HttpContext.User.IsInRole("Member"))
-            {
-                // Allow members to access the action
-                return;
-            }
-            
             using (MyDBContext db = new MyDBContext())
             {
                 UserManager um = new UserManager();
