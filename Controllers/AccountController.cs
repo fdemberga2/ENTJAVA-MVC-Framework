@@ -20,21 +20,19 @@ namespace MyWebApplication.Controllers
         {
             return View();
         }
-        
+
         public ActionResult MyProfile()
         {
             UserManager um = new UserManager();
-            string currentLoginName = User.Identity.Name; // Get the username of the logged-in user
-
-            UsersModel user = um.GetUserByUserName(currentLoginName); // Replace with your service method
-
-            if (user == null)
+            string username = HttpContext.User.Identity.Name;
+            if (!um.IsLoginNameExist(username))
             {
-                return NotFound(); // Handle the case when the user is not found
+                return RedirectToAction("LoginNameNotFound");
             }
-
+            UserModel user = um.GetCurrentUser(username);
             return View(user);
         }
+
         [AuthorizeRoles("Admin")]
         public ActionResult Users()
         {
@@ -57,14 +55,14 @@ namespace MyWebApplication.Controllers
                 {
                     um.AddUserAccount(user);
                     // FormsAuthentication.SetAuthCookie(user.FirstName, false);
-                    return RedirectToAction("", "Home");
+                    return RedirectToAction("", "Login");
                 }
                 else
                     ModelState.AddModelError("", "Login Name already taken.");
             }
             return View();
         }
-
+        
         [HttpPut]
         public async Task<ActionResult> Update([FromBody] UserModel userData)
         {
@@ -79,6 +77,36 @@ namespace MyWebApplication.Controllers
             }
             // Handle the case when the login name doesn't exist, e.g., return a relevant error response
             return NotFound();
+        }
+        [HttpPost]
+        [AuthorizeRoles("Admin", "Member")]
+        public ActionResult MyProfile(UserModel userData)
+        {
+            ModelState.Remove("AccountImage");
+            ModelState.Remove("RoleName");
+
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            UserManager um = new UserManager();
+            string username = HttpContext.User.Identity.Name;
+            if (!um.IsLoginNameExist(username))
+            {
+                return RedirectToAction("LoginNameNotFound");
+            }
+            if (userData.LoginName != username && um.IsLoginNameExist(userData.LoginName))
+            {
+                ModelState.AddModelError("", "Login name already exists");
+                return View();
+            }
+            um.UpdateProfile(userData, username);
+            if (userData.LoginName != username)
+            {
+                HttpContext.SignOutAsync();
+                return RedirectToAction("LogIn");
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
